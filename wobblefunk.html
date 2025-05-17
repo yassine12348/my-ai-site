@@ -1,0 +1,76 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1" /> <title>WobbleFunk Central</title> <style> body { font-family: 'Comic Sans MS', cursive, sans-serif; background: linear-gradient(135deg, #8f94fb 0%, #4e54c8 100%); color: #f0e6ff; margin: 0; padding: 0; overflow-x: hidden; } header { position: relative; background: linear-gradient(90deg, #6a11cb, #2575fc); color: #fff; padding: 2rem; text-align: center; font-size: 3rem; font-weight: 900; letter-spacing: 0.15rem; text-shadow: 3px 3px 10px #1a1a72; } /* Hamburger menu icon container */ #menuToggle { position: fixed; top: 50%; left: 20px; transform: translateY(-50%); width: 30px; height: 22px; cursor: pointer; z-index: 1100; display: flex; flex-direction: column; justify-content: space-between; } /* Hamburger lines */ #menuToggle span { display: block; height: 4px; background: #fff; border-radius: 3px; transition: all 0.3s ease; } /* Side menu styling */ #sideMenu { position: fixed; top: 0; left: -260px; /* hide off screen */ width: 260px; height: 100vh; background: rgba(106, 17, 203, 0.95); box-shadow: 4px 0 15px rgba(0,0,0,0.4); padding: 3rem 1.5rem; box-sizing: border-box; transition: left 0.3s ease; z-index: 1050; color: #ddd6ff; font-weight: 700; display: flex; flex-direction: column; } #sideMenu.open { left: 0; } #sideMenu h3 { margin-top: 0; margin-bottom: 1.5rem; font-size: 1.8rem; border-bottom: 2px dotted #b6a0fe; padding-bottom: 0.3rem; } #sideMenu a { color: #d9cfff; text-decoration: none; padding: 0.7rem 0; font-size: 1.2rem; border-bottom: 1px solid #6b50f2cc; transition: color 0.2s ease; } #sideMenu a:hover { color: #fff; } #sideMenu button.closeBtn { align-self: flex-end; background: none; border: none; font-size: 2rem; color: #b6a0fe; cursor: pointer; margin-bottom: 2rem; transition: color 0.3s ease; } #sideMenu button.closeBtn:hover { color: #fff; } main { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; } section { background: rgba(255, 255, 255, 0.15); border-radius: 18px; padding: 2rem; margin-bottom: 2.5rem; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); backdrop-filter: blur(12px); color: #e2dbff; } h2 { font-family: 'Arial Black', Gadget, sans-serif; color: #f0e6ff; border-bottom: 3px dotted #b6a0fe; padding-bottom: 0.7rem; margin-bottom: 1.3rem; text-transform: uppercase; letter-spacing: 0.2rem; } ul { list-style-type: none; padding-left: 0; } ul li { margin-bottom: 0.8rem; font-size: 1.15rem; font-weight: 600; text-shadow: 1px 1px 2px #2a2a72; } table { width: 100%; border-collapse: collapse; box-shadow: 0 0 8px #a89fff88; border-radius: 12px; overflow: hidden; } th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #9a8affcc; color: #d3c9ff; font-weight: 700; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; } th { background: #6b50f2cc; } tr:hover { background: #9a8aff44; } img { width: 100%; max-width: 420px; border-radius: 14px; margin: 1rem 0; box-shadow: 0 0 15px #b69fffcc; transition: transform 0.3s ease; cursor: pointer; } img:hover { transform: scale(1.05) rotate(3deg); box-shadow: 0 0 30px #d9cfff; } blockquote { font-style: italic; background: #41338d88; border-left: 8px solid #b19fffcc; padding: 1.3rem 2rem; margin: 1.5rem 0; color: #ddd6ff; font-size: 1.1rem; max-width: 75%; border-radius: 12px; box-shadow: 0 0 10px #a892ffcc; } button { background-color: #a17aff; border: none; color: white; padding: 0.65rem 1.3rem; font-size: 1.1rem; font-weight: 700; border-radius: 8px; cursor: pointer; margin-left: 1rem; vertical-align: middle; transition: background-color 0.25s ease, box-shadow 0.3s ease; box-shadow: 0 0 10px #8a6cffbb; } button:hover { background-color: #7a5fff; box-shadow: 0 0 18px #aa92ffcc; } footer { text-align: center; font-size: 1rem; color: #bdb6ffcc; padding: 1.2rem 0; border-top: 1px solid #6a5affcc; margin-top: 5rem; font-weight: 600; text-shadow: 0 0 10px #827fffbb; } a { color: #d9cfff; text-decoration: none; font-weight: 700; text-shadow: 0 0 5px #c9bfffcc; } a:hover { text-decoration: underline; } .ai-credit { text-align: center; font-size: 0.9rem; color: #b6a0feaa; padding: 1.5rem 0 4rem 0; font-style: italic; user-select: none; text-shadow: 0 0 8px #998affaa; } </style> </head> <body> <!-- Hamburger Icon --> <div id="menuToggle" aria-label="Open menu" role="button" tabindex="0"> <span></span> <span></span> <span></span> </div> <!-- Side Menu --> <nav id="sideMenu" aria-hidden="true" aria-label="Main navigation"> <button class="closeBtn" aria-label="Close menu">&times;</button> <h3>Menu</h3> <a href="#welcome">Welcome</a> <a href="#random-nuggets">Random Nuggets</a> <a href="#news">WobbleFunk News</a> <a href="#art-gallery">Art Gallery</a> <a href="#fortune-cookie">Fortune Cookie</a> <a href="#contact">Contact</a> </nav> <header> WobbleFunk Central </header> <main> <section id="welcome"> <h2>🌀 Welcome to WobbleFunk Central!</h2> <p> Here at WobbleFunk, we celebrate the chaos of life with a dash of glitter, a splash of nonsense, and a whole lot of random vibes. Whether you’re here to browse, to wonder, or just to escape the mundane — you’re in the right place! </p> </section> <section id="random-nuggets"> <h2>🤡 Today's Random Nuggets</h2> <ul> <li>The average unicorn eats exactly 7.3 marshmallows per Tuesday.</li> <li>Quantum bananas exist only in alternate universes where gravity likes jazz.</li> <li>If you yell “pineapple” three times into your toaster, it might just listen. Maybe.</li> </ul> </section> <section id="news"> <h2>🥳 WobbleFunk News</h2> <table> <thead> <tr><th>Date</th><th>Event</th></tr> </thead> <tbody> <tr><td>2025-05-16</td><td>Spontaneous disco dance outbreak downtown</td></tr> <tr><td>2025-05-17</td><td>Scientists discover socks have feelings</td></tr> <tr><td>2025-05-18</td><td>Official “Talk to Your Plants” holiday declared</td></tr> </tbody> </table> </section> <section id="art-gallery"> <h2>🎨 Random Art Gallery</h2> <img src="https://picsum.photos/400/200?random=1" alt="Pixelated Platypus" /> <p><em>"The Platypus contemplates existence"</em></p> <img src="https://picsum.photos/400/200?random=2" alt="Surreal Salad" /> <p><em>"When lettuce dreams of freedom"</em></p> </section> <section id="fortune-cookie"> <h2>🔮 Fortune Cookie of the Day <button id="newFortuneBtn">New Fortune</button> </h2> <blockquote id="fortuneText"> "A pizza will find you when you least expect it, and it will be delicious." </blockquote> </section> <section id="contact"> <h2>📞 Contact Us</h2> <p>Send us your weirdest thoughts:</p> <p><strong>Email:</strong> <a href="mailto:wobblefunk@chaosmail.random">wobblefunk@chaosmail.random</a></p> <p><strong>Phone:</strong> +1 (555) 867-5309 (seriously, call it)</p> </section> </main> <footer> Powered by random nonsense & the internet's collective weirdness. 🌈✨ </footer> <div class="ai-credit">site generated by ai</div> <script>
+// Sound elements
+const menuSound = document.getElementById('menuSound');
+const fortuneSound = document.getElementById('fortuneSound');
+
+// Fortune Cookie logic
+const fortunes = [
+  "A pizza will find you when you least expect it, and it will be delicious.",
+  "Beware of the dancing toaster; it knows your secrets.",
+  "Your socks will never match, but your smile will always be bright.",
+  "In the near future, a disco ball will guide your path.",
+  "Quantum cats rule the internet when you’re not looking.",
+  "Speak to your plants daily, they enjoy the conversation.",
+  "The next slice of cake will bring you unexpected joy.",
+  "Your keyboard secretly dreams of being a piano.",
+  "A random llama will soon change your perspective.",
+  "Adventure awaits just beyond your couch cushions."
+];
+const fortuneText = document.getElementById('fortuneText');
+const newFortuneBtn = document.getElementById('newFortuneBtn');
+newFortuneBtn.addEventListener('click', () => {
+  const randomIndex = Math.floor(Math.random() * fortunes.length);
+  fortuneText.textContent = `"${fortunes[randomIndex]}"`;
+  fortuneSound.currentTime = 0;
+  fortuneSound.play();
+});
+
+// Menu toggle logic
+const menuToggle = document.getElementById('menuToggle');
+const sideMenu = document.getElementById('sideMenu');
+const closeBtn = sideMenu.querySelector('.closeBtn');
+
+function openMenu() {
+  sideMenu.classList.add('open');
+  sideMenu.setAttribute('aria-hidden', 'false');
+  sideMenu.querySelector('a').focus();
+  menuSound.currentTime = 0;
+  menuSound.play();
+}
+
+function closeMenu() {
+  sideMenu.classList.remove('open');
+  sideMenu.setAttribute('aria-hidden', 'true');
+  menuToggle.focus();
+  menuSound.currentTime = 0;
+  menuSound.play();
+}
+
+menuToggle.addEventListener('click', () => {
+  if (sideMenu.classList.contains('open')) {
+    closeMenu();
+  } else {
+    openMenu();
+  }
+});
+
+closeBtn.addEventListener('click', closeMenu);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && sideMenu.classList.contains('open')) {
+    closeMenu();
+  }
+});
+
+menuToggle.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    if (sideMenu.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+});
+</script>
+ <script> // Fortune Cookie logic const fortunes = [ "A pizza will find you when you least expect it, and it will be delicious.", "Beware of the dancing toaster; it knows your secrets.", "Your socks will never match, but your smile will always be bright.", "In the near future, a disco ball will guide your path.", "Quantum cats rule the internet when you’re not looking.", "Speak to your plants daily, they enjoy the conversation.", "The next slice of cake will bring you unexpected joy.", "Your keyboard secretly dreams of being a piano.", "A random llama will soon change your perspective.", "Adventure awaits just beyond your couch cushions." ]; const fortuneText = document.getElementById('fortuneText'); const newFortuneBtn = document.getElementById('newFortuneBtn'); newFortuneBtn.addEventListener('click', () => { const randomIndex = Math.floor(Math.random() * fortunes.length); fortuneText.textContent = `"${fortunes[randomIndex]}"`; }); // Menu toggle logic const menuToggle = document.getElementById('menuToggle'); const sideMenu = document.getElementById('sideMenu'); const closeBtn = sideMenu.querySelector('.closeBtn'); function openMenu() { sideMenu.classList.add('open'); sideMenu.setAttribute('aria-hidden', 'false'); // trap focus or set focus on first link if needed sideMenu.querySelector('a').focus(); } function closeMenu() { sideMenu.classList.remove('open'); sideMenu.setAttribute('aria-hidden', 'true'); menuToggle.focus(); } menuToggle.addEventListener('click', openMenu); closeBtn.addEventListener('click', closeMenu); // Also close menu if user presses Escape document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && sideMenu.classList.contains('open')) { closeMenu(); } }); // Allow opening menu via keyboard (Enter or Space) on hamburger menuToggle.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (sideMenu.classList.contains('open')) { closeMenu(); } else { openMenu(); } } }); </script> </body> </html>
