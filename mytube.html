@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MyTube - Home + Search</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  header {
+    background: #cc0000;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    user-select: none;
+  }
+  .header-buttons {
+    display: flex;
+    gap: 12px;
+  }
+  button {
+    background: #fff;
+    color: #cc0000;
+    border: none;
+    padding: 8px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+    transition: background 0.25s, color 0.25s;
+  }
+  button:hover {
+    background: #cc0000;
+    color: #fff;
+  }
+
+  /* Search bar container */
+  #search-container {
+    max-width: 700px;
+    margin: 0 auto;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    background: white;
+    border-bottom: 3px solid #cc0000;
+  }
+  #search-container.open {
+    max-height: 300px;
+    padding: 15px 20px;
+  }
+  #search-form {
+    display: flex;
+  }
+  #search-input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    font-size: 1.1rem;
+    border: 2px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  #search-input:focus {
+    border-color: #cc0000;
+  }
+  #search-submit {
+    padding: 10px 20px;
+    border: none;
+    background: #cc0000;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  #search-submit:hover {
+    background: #aa0000;
+  }
+
+  /* Search suggestions/results rectangle */
+  #search-results {
+    margin-top: 15px;
+    max-height: 180px;
+    overflow-y: auto;
+    border: 2px solid #cc0000;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    animation: fadeInSlideDown 0.4s ease forwards;
+  }
+  @keyframes fadeInSlideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .search-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    user-select: none;
+  }
+  .search-item:last-child {
+    border-bottom: none;
+  }
+  .search-item:hover {
+    background: #f0f0f0;
+  }
+  .search-thumb {
+    width: 90px;
+    flex-shrink: 0;
+  }
+  .search-thumb img {
+    width: 100%;
+    border-radius: 4px;
+  }
+  .search-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #222;
+  }
+
+  /* Main videos grid */
+  #main-videos {
+    max-width: 1000px;
+    margin: 30px auto 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+    gap: 20px;
+  }
+  .video-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+    text-decoration: none;
+    color: black;
+  }
+  .video-card:hover {
+    transform: scale(1.05);
+  }
+  .video-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .video-title {
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    flex-grow: 1;
+  }
+
+  /* Modal styles */
+  #video-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  #video-modal.active {
+    display: flex;
+  }
+  #modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 15px #000;
+  }
+  #modal-content iframe {
+    width: 100%;
+    height: 450px;
+    border: none;
+    display: block;
+  }
+  #close-modal {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: #cc0000;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 4px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 1001;
+  }
+  #close-modal:hover {
+    background: #aa0000;
+  }
+
+  /* Settings Modal */
+  #settings-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+  }
+  #settings-modal.active {
+    display: flex;
+  }
+  #settings-content {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 0 12px rgba(0,0,0,0.3);
+    position: relative;
+  }
+  #settings-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: #cc0000;
+    color: white;
+    font-size: 1.2rem;
+    padding: 2px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  #settings-close:hover {
+    background: #aa0000;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: auto;
+    padding: 15px 10px;
+    color: #888;
+    font-size: 0.9rem;
+    background: #fff;
+    border-top: 1px solid #eee;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎥 MyTube</h1>
+  <div class="header-buttons">
+    <button id="toggle-search-btn" aria-expanded="false" aria-controls="search-container" aria-label="Toggle search bar">Search 🔍</button>
+    <button id="settings-btn" aria-label="Open settings">⚙️ Settings</button>
+  </div>
+</header>
+
+<div id="search-container" aria-hidden="true">
+  <form id="search-form" autocomplete="off" role="search">
+    <input type="search" id="search-input" placeholder="Search YouTube videos..." aria-label="Search videos" required />
+    <button type="submit" id="search-submit">Go</button>
+  </form>
+  <div id="search-results" role="listbox" aria-label="Search results"></div>
+</div>
+
+<main id="main-videos" aria-live="polite" aria-label="Featured videos">
+  <!-- Example preset videos like before -->
+</main>
+
+<!-- Video Modal -->
+<div id="video-modal" role="dialog" aria-modal="true" aria-labelledby="modal-video-title">
+  <div id="modal-content">
+    <button id="close-modal" aria-label="Close video player">×</button>
+    <iframe id="video-iframe" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+  <div id="settings-content">
+    <button id="settings-close" aria-label="Close settings">×</button>
+    <h2 id="settings-title">Settings</h2>
+    <p>Settings coming soon!</p>
+  </div>
+</div>
+
+<footer>
+  © 2025 MyTube - Powered by YouTube Data API
+</footer>
+
+<script>
+  // === Preset videos from before ===
+  const presetVideos = [
+    {
+      videoId: "dQw4w9WgXcQ",
+      title: "Rick Astley - Never Gonna Give You Up",
+      thumbnail: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg"
+    },
+    {
+      videoId: "3tmd-ClpJxA",
+      title: "Marshmello & Bastille - Happier",
+      thumbnail: "https://img.youtube.com/vi/3tmd-ClpJxA/hqdefault.jpg"
+    },
+    {
+      videoId: "LsoLEjrDogU",
+      title: "Imagine Dragons - Believer",
+      thumbnail: "https://img.youtube.com/vi/LsoLEjrDogU/hqdefault.jpg"
+    },
+    {
+      videoId: "hT_nvWreIhg",
+      title: "Avicii - Wake Me Up",
+      thumbnail: "https://img.youtube.com/vi/hT_nvWreIhg/hqdefault.jpg"
+    },
+    {
+      videoId: "kJQP7kiw5Fk",
+      title: "Luis Fonsi - Despacito",
+      thumbnail: "https://img.youtube.com/vi/kJQP7kiw5Fk/hqdefault.jpg"
+    },
+    {
+      videoId: "JGwWNGJdvx8",
+      title: "Ed Sheeran - Shape of You",
+      thumbnail: "https://img.youtube.com/vi/JGwWNGJdvx8/hqdefault.jpg"
+    }
+  ];
+
+  // Render preset videos on page load
+  const mainVideos = document.getElementById('main-videos');
+  function renderPresetVideos() {
+    mainVideos.innerHTML = '';
+    for (const vid of presetVideos) {
+      const card = document.createElement('a');
+      card.className = 'video-card';
+      card.href = '#';
+      card.setAttribute('data-video-id', vid.videoId);
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.innerHTML = `
+        <img src="${vid.thumbnail}" alt="${vid.title} thumbnail" />
+        <div class="video-title">${vid.title}</div>
+      `;
+      card.addEventListener('click', openVideoModal);
+      card.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openVideoModal.call(card);
+        }
+      });
+      mainVideos.appendChild(card);
+    }
+  }
+
+  // === Video Modal ===
+  const videoModal = document.getElementById('video-modal');
+  const videoIframe = document.getElementById('video-iframe');
+  const closeModalBtn = document.getElementById('close-modal');
+
+  function openVideoModal() {
+    const vidId = this.getAttribute('data-video-id');
+    videoIframe.src = `https://www.youtube.com/embed/${vidId}?autoplay=1`;
+    videoModal.classList.add('active');
+    videoModal.focus();
+  }
+  function closeVideoModal() {
+    videoIframe.src = '';
+    videoModal.classList.remove('active');
+  }
+  closeModalBtn.addEventListener('click', closeVideoModal);
+  videoModal.addEventListener('click', (e) => {
+    if (e.target === videoModal) closeVideoModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+      closeVideoModal();
+    }
+  });
+
+  // === Search Bar Toggle ===
+  const toggleSearchBtn = document.getElementById('toggle-search-btn');
+  const searchContainer = document.getElementById('search-container');
+  const searchInput = document.getElementById('search-input');
+  const searchResults = document.getElementById('search-results');
+  const searchForm = document.getElementById('search-form');
+
+  toggleSearchBtn.addEventListener('click', () => {
+    const isOpen = searchContainer.classList.toggle('open');
+    searchContainer.setAttribute('aria-hidden', !isOpen);
+    toggleSearchBtn.setAttribute('aria-expanded', isOpen);
+    if (isOpen) {
+      searchInput.focus();
+    } else {
+      // Hide results and clear input when closed
+      searchResults.innerHTML = '';
+      searchInput.value = '';
+    }
+  });
+
+  // === Settings Modal ===
+  const settingsBtn = document.getElementById('settings-btn');
+  const settingsModal = document.getElementById('settings-modal');
+  const settingsClose = document.getElementById('settings-close');
+  const settingsContent = document.getElementById('settings-content');
+
+  settingsBtn.addEventListener('click', () => {
+    settingsModal.classList.add('active');
+    settingsModal.focus();
+  });
+  settingsClose.addEventListener('click', () => {
+    settingsModal.classList.remove('active');
+  });
+  settingsModal.addEventListener('click', (e) => {
+    if (e.target === settingsModal) {
+      settingsModal.classList.remove('active');
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && settingsModal.classList.contains('active')) {
+      settingsModal.classList.remove('active');
+    }
+  });
+
+  // === YouTube Search API ===
+  const API_KEY = 'YOUR_YOUTUBE_API_KEY'; // Replace with your actual API key
+
+  async function searchYouTube(query) {
+    try {
+      const response = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&part=snippet&type=video&maxResults=5&q=${encodeURIComponent(query)}`);
+      if (!response.ok) {
+        throw new Error('Network response was not OK');
+      }
+      const data = await response.json();
+      return data.items || [];
+    } catch (error) {
+      console.error('YouTube API error:', error);
+      return [];
+    }
+  }
+
+  function clearResults() {
+    searchResults.innerHTML = '';
+  }
+
+  function renderSearchResults(videos) {
+    clearResults();
+    if (videos.length === 0) {
+      const noRes = document.createElement('div');
+      noRes.textContent = 'No results found.';
+      noRes.style.padding = '10px 15px';
+      searchResults.appendChild(noRes);
+      return;
+    }
+    for (const item of videos) {
+      const videoId = item.id.videoId;
+      const title = item.snippet.title;
+      const thumb = item.snippet.thumbnails.medium.url;
+      const div = document.createElement('div');
+      div.className = 'search-item';
+      div.setAttribute('role', 'option');
+      div.tabIndex = 0;
+      div.innerHTML = `
+        <div class="search-thumb"><img src="${thumb}" alt="${title} thumbnail"></div>
+        <div class="search-title">${title}</div>
+      `;
+      div.addEventListener('click', () => {
+        openVideoModal.call({ getAttribute: () => videoId });
+        clearResults();
+        searchInput.value = '';
+      });
+      div.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openVideoModal.call({ getAttribute: () => videoId });
+          clearResults();
+          searchInput.value = '';
+        }
+      });
+      searchResults.appendChild(div);
+    }
+  }
+
+  let debounceTimeout;
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim();
+    clearTimeout(debounceTimeout);
+    if (query.length === 0) {
+      clearResults();
+      return;
+    }
+    debounceTimeout = setTimeout(async () => {
+      const results = await searchYouTube(query);
+      renderSearchResults(results);
+    }, 400);
+  });
+
+  searchForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const query = searchInput.value.trim();
+    if (query.length === 0) return;
+    const results = await searchYouTube(query);
+    renderSearchResults(results);
+  });
+
+  // === Theme Handling ===
+  // Add the theme selector dropdown into settings content dynamically (replace the placeholder <p>)
+
+  const settingsHTML = `
+    <h2 id="settings-title">Settings</h2>
+    <label for="theme-select" style="display:block; margin-bottom:10px; font-weight:bold;">Choose Theme:</label>
+    <select id="theme-select" style="width:100%; padding:8px; font-size:1rem; border-radius:4px; border:1px solid #ccc;">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+      <option value="red">Red</option>
+    </select>
+  `;
+  settingsContent.innerHTML = `<button id="settings-close" aria-label="Close settings">×</button>${settingsHTML}`;
+
+  // Re-attach the close button event (since we replaced innerHTML)
+  document.getElementById('settings-close').addEventListener('click', () => {
+    settingsModal.classList.remove('active');
+  });
+
+  const themeSelect = document.getElementById('theme-select');
+
+  function applyTheme(theme) {
+    document.body.classList.remove('light-theme', 'dark-theme', 'red-theme');
+    if (theme === 'dark') {
+      document.body.classList.add('dark-theme');
+    } else if (theme === 'red') {
+      document.body.classList.add('red-theme');
+    } else {
+      document.body.classList.add('light-theme');
+    }
+  }
+
+  const savedTheme = localStorage.getItem('mytube-theme') || 'light';
+  applyTheme(savedTheme);
+  themeSelect.value = savedTheme;
+
+  themeSelect.addEventListener('change', (e) => {
+    const newTheme = e.target.value;
+    applyTheme(newTheme);
+    localStorage.setItem('mytube-theme', newTheme);
+  });
+
+  // Initial render of preset videos
+  renderPresetVideos();
+</script>
+<style>
+  /* Theme colors */
+  body.light-theme {
+    background: #f9f9f9;
+    color: #222;
+  }
+
+  body.light-theme header {
+    background: #cc0000;
+    color: white;
+  }
+
+  body.light-theme button {
+    background: #fff;
+    color: #cc0000;
+  }
+
+  body.light-theme button:hover {
+    background: #cc0000;
+    color: #fff;
+  }
+
+  body.dark-theme {
+    background: #121212;
+    color: #eee;
+  }
+
+  body.dark-theme header {
+    background: #222;
+    color: #eee;
+  }
+
+  body.dark-theme button {
+    background: #333;
+    color: #eee;
+  }
+
+  body.dark-theme button:hover {
+    background: #cc0000;
+    color: #fff;
+  }
+
+  body.dark-theme #search-container {
+    background: #222;
+    border-color: #cc0000;
+  }
+
+  body.dark-theme #search-input {
+    background: #333;
+    color: #eee;
+    border-color: #555;
+  }
+
+  body.dark-theme #search-input:focus {
+    border-color: #cc0000;
+  }
+
+  body.dark-theme #search-results {
+    background: #222;
+    border-color: #cc0000;
+    color: #eee;
+  }
+
+  body.dark-theme .video-card {
+    background: #222;
+    color: #eee;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.05);
+  }
+
+  body.dark-theme #settings-content {
+    background: #222;
+    color: #eee;
+  }
+
+  body.dark-theme footer {
+    background: #111;
+    color: #888;
+  }
+
+  body.red-theme {
+    background: #fff0f0;
+    color: #660000;
+  }
+
+  body.red-theme header {
+    background: #990000;
+    color: #fff0f0;
+  }
+
+  body.red-theme button {
+    background: #fff0f0;
+    color: #990000;
+  }
+
+  body.red-theme button:hover {
+    background: #660000;
+    color: #fff0f0;
+  }
+
+  body.red-theme #search-container {
+    background: #fff0f0;
+    border-color: #990000;
+  }
+
+  body.red-theme #search-input {
+    background: #ffe6e6;
+    color: #660000;
+    border-color: #cc3333;
+  }
+
+  body.red-theme #search-input:focus {
+    border-color: #cc3333;
+  }
+
+  body.red-theme #search-results {
+    background: #fff0f0;
+    border-color: #cc3333;
+    color: #660000;
+  }
+
+  body.red-theme .video-card {
+    background: #ffe6e6;
+    color: #660000;
+    box-shadow: 0 2px 8px rgba(204, 51, 51, 0.2);
+  }
+
+  body.red-theme #settings-content {
+    background: #ffe6e6;
+    color: #660000;
+  }
+
+  body.red-theme footer {
+    background: #fff0f0;
+    color: #cc3333;
+  }
+</style>
+
+</body>
+</html>
